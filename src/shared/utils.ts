@@ -8,6 +8,11 @@ export function resolveDuration(
   from: string;
   to: string;
 } {
+  if(duration === Duration.DEFAULT) return {
+    from: '',
+    to: '',
+  } 
+  
   const toDate = duration === Duration.CUSTOM ? new Date(to) : new Date();
   const fromDate = duration === Duration.CUSTOM ? new Date(from) : new Date();
 

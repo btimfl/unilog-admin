@@ -22,7 +22,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
     const [sortBy, setSortBy] = useState<string>("");
     const [filterBy, setFilterBy] = useState<string[]>([]);
 
-    const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
+    const [duration, setDuration] = useState<Duration>(Duration.DEFAULT);
     const { fromDate, toDate, setFromDate, setToDate } = useDate(duration);
 
     const [customFieldValues, setCustomFieldValues] = useState<CustomFieldValues[]>([]);
@@ -59,7 +59,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
     const onSearch = (wasReset = false) => {
         if(wasReset) {
             clearFilters()
-            const initDate = resolveDuration(Duration.LAST_WEEK, '', '')
+            const initDate = resolveDuration(Duration.DEFAULT, '', '')
             setFilters({
                 searchText: searchQuery,
                 from: initDate.from,
@@ -93,7 +93,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
     const clearFilters = () => {
         setSortBy('');
         setFilterBy([]);
-        setDuration(Duration.LAST_WEEK);
+        setDuration(Duration.DEFAULT);
         setCustomFieldValues(prev => prev.map(v => {
             if(v.type === 'multi_select') v.value = [];
             else if(v.type === 'text') v.value = '';

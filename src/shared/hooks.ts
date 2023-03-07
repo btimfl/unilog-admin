@@ -4,7 +4,7 @@ import { Duration } from './enums';
 import { resolveDuration } from './utils';
 
 export function useDate(duration: Duration) {
-  const { from, to } = resolveDuration(Duration.LAST_WEEK, '', '');
+  const { from, to } = resolveDuration(Duration.DEFAULT, '', '');
 
   const [toDate, setToDate] = useState<string>(to);
   const [fromDate, setFromDate] = useState<string>(from);
@@ -24,7 +24,7 @@ export function useDeviations(sortBy: string, filterBy: string[], duration: Dura
 
   useEffect(() => {
     let devs = 0;
-    if(duration !== Duration.LAST_WEEK) ++devs;
+    if(duration !== Duration.DEFAULT) ++devs;
     if(sortBy !== '') ++devs;
     if(filterBy.length !== 0) ++devs;
 
