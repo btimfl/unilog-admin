@@ -22,7 +22,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
     const [sortBy, setSortBy] = useState<string>("");
     const [filterBy, setFilterBy] = useState<string[]>([]);
 
-    const [duration, setDuration] = useState<Duration>(Duration.DEFAULT);
+    const [duration, setDuration] = useState<Duration>(Duration.LAST_WEEK);
     const { fromDate, toDate, setFromDate, setToDate } = useDate(duration);
 
     const [customFieldValues, setCustomFieldValues] = useState<CustomFieldValues[]>([]);
@@ -56,10 +56,10 @@ export default function FilterBar({ filters, setFilters }: Props) {
         })
     }, [])
 
-    const onSearch = (wasReset = false) => {
+    const onSearch = (wasReset = false, duration?: Duration) => {
         if(wasReset) {
-            clearFilters()
-            const initDate = resolveDuration(Duration.DEFAULT, '', '')
+            clearFilters(duration)
+            const initDate = resolveDuration(duration ?? Duration.LAST_WEEK, '', '')
             setFilters({
                 searchText: searchQuery,
                 from: initDate.from,
@@ -90,10 +90,10 @@ export default function FilterBar({ filters, setFilters }: Props) {
         onSearch();
     }
 
-    const clearFilters = () => {
+    const clearFilters = (duration?: Duration) => {
         setSortBy('');
         setFilterBy([]);
-        setDuration(Duration.DEFAULT);
+        setDuration(duration ?? Duration.LAST_WEEK);
         setCustomFieldValues(prev => prev.map(v => {
             if(v.type === 'multi_select') v.value = [];
             else if(v.type === 'text') v.value = '';
@@ -104,7 +104,7 @@ export default function FilterBar({ filters, setFilters }: Props) {
     return (
         <>
             <Flex justifyContent="space-between" align="center">
-                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`40%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && onSearch(true)} />
+                <Input value={searchQuery} placeholder="Search AWB/Order/Phone/Facility/Courier" w={`40%`} bg={`#fff`} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && onSearch(true, e.currentTarget.value ? Duration.LAST_90_DAYS: Duration.LAST_WEEK)} />
                 <Flex gap={4}>
                     <Button colorScheme="teal" size="sm" onClick={onOpen}>
                         <Text as="span">Filter Records</Text>
